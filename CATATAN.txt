@@ -56,6 +56,10 @@ use SoftDeletes;
 - add in migration :
 $table->softDeletes();
 
+# Use Mass Assignment :
+- add in model :
+protected $fillable = ['name', 'price', 'image'];
+
 # Use paginate Laravel :
 # ProductController.php :
 $products = Product::latest()->paginate(2);
