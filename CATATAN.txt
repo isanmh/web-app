@@ -1,0 +1,41 @@
+# cara membuat authorization & authentication :
+- laravel/ui (untuk vue, react, bootstrap)
+- breeze (tailwind css)
+- jetstream (livewire, vue, inertia)
+- fortify
+
+# Cara Install laravel UI bootstrap :
+1. composer require laravel/ui
+2. php artisan ui bootstrap --auth
+3. npm install && npm run dev
+
+# Cara membuat paginate Laravel :
+# ProductController.php :
+
+$products = Product::latest()->paginate(2);
+
+# view/index.blade.php :
+
+<th class="align-middle">{{ $products->firstItem() + $loop->index }}</th>
+-- table content --
+{{ $products->links() }}
+
+# App Service Provider :
+Paginator::useBootstrap();
+
+
+==== Optimizations Laravel ====
+- Productions Mode :
+1. composer install --optimize-autoloader --no-dev
+2. gunakan optimize :
+php artisan optimize
+3. env :
+APP_ENV=production
+APP_DEBUG=false
+
+4. Install Laravel Octane :
+composer require laravel/octane
+php artisan octane:install
+php artisan octane:start
+
+
