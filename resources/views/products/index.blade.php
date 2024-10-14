@@ -33,8 +33,7 @@
                                 {{-- looping data --}}
                                 @foreach ($products as $item)
                                     <tr>
-                                        {{-- <th class="align-middle">{{ $loop->iteration }}</th> --}}
-                                        <th class="align-middle">{{ $products->firstItem() + $loop->index }}</th>
+                                        <th class="align-middle">{{ $loop->iteration }}</th>
                                         <td class="align-middle">
                                             <img src="{{ asset('assets/images/' . $item->image) }}"
                                                 alt="{{ $item->image }}" height="50">
@@ -63,8 +62,7 @@
                                 </tr>
                             @endif
                         </table>
-                        {{-- untuk pagination --}}
-                        {{ $products->links() }}
+
                     </div>
                     {{-- end tables --}}
                 </div>

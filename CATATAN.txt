@@ -9,20 +9,64 @@
 2. php artisan ui bootstrap --auth
 3. npm install && npm run dev
 
-# Cara membuat paginate Laravel :
-# ProductController.php :
+======Secure Coding Laravel======
+# Validation Laravel File :
+store :
+$request->validate([
+    'name' => 'required|string|max:255',
+    'price' => 'required|integer',
+    'image' => 'image|required|mimes:png,jpg,svg,jpeg|max:2048'
+]);
 
+update :
+$request->validate([
+    'name' => 'string|max:255',
+    'price' => 'integer',
+    'image' => 'image|mimes:png,jpg,svg,jpeg|max:2048'
+]);
+
+# use Symlink Laravel Storage :
+php artisan storage:link
+
+- Store Image :
+if ($image = $request->file('image')) {
+    $targetPath = 'assets/images/';
+    $product_img = date('YmdHis') . "." . $image->getClientOriginalExtension();
+    $image->storeAs($targetPath, $product_img, 'public');
+    $input['image'] = "$product_img";
+}
+
+- Update Image :
+// unlink storage link
+if ($product->image) {
+    unlink(storage_path('app/public/assets/images/' . $product->image));
+}
+
+// store image
+$image->storeAs('assets/images', $product_img, 'public');
+
+- view image :
+<img src="{{ Storage::url('public/assets/images/' . $item->image) }}" alt="{{ $item->image }}" height="50">
+
+
+# Use soft delete :
+- add in model :
+use SoftDeletes;
+
+- add in migration :
+$table->softDeletes();
+
+# Use paginate Laravel :
+# ProductController.php :
 $products = Product::latest()->paginate(2);
 
 # view/index.blade.php :
-
 <th class="align-middle">{{ $products->firstItem() + $loop->index }}</th>
 -- table content --
 {{ $products->links() }}
 
 # App Service Provider :
 Paginator::useBootstrap();
-
 
 ==== Optimizations Laravel ====
 - Productions Mode :

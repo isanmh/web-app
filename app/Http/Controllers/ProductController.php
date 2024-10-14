@@ -14,8 +14,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        // $products = Product::all();
-        $products = Product::latest()->paginate(2);
+        $products = Product::all();
         return view('products.index', compact('products'));
     }
 
@@ -37,11 +36,6 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|integer',
-            'image' => 'image|required|mimes:png,jpg,svg,jpeg|max:2048'
-        ]);
 
         $input = $request->all();
 
@@ -92,12 +86,6 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        $request->validate([
-            'name' => 'string|max:255',
-            'price' => 'integer',
-            'image' => 'image|mimes:png,jpg,svg,jpeg|max:2048'
-        ]);
-
         $input = $request->all();
 
         if ($image = $request->file('image')) {
@@ -106,6 +94,7 @@ class ProductController extends Controller
             if ($product->image) {
                 unlink($targetPath . $product->image);
             }
+
             $product_img = date('YmdHis') . "." . $image->getClientOriginalExtension();
             $image->move($targetPath, $product_img);
             $input['image'] = "$product_img";
@@ -129,10 +118,10 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         // hapus gambar permanent
-        // $target = 'assets/images/';
-        // if ($product->image) {
-        //     unlink($target . $product->image);
-        // }
+        $target = 'assets/images/';
+        if ($product->image) {
+            unlink($target . $product->image);
+        }
         // hapus data permanent
         $product->delete();
         return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus permanen');
