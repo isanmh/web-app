@@ -167,3 +167,20 @@ test('landing page', function () {
     });
     atau
     Route::get('product', [ProductApiController::class, 'index'])->middleware('snap-bi');
+
+=======throttle request=======
+# Route
+Route::get('/', function () {
+    return view('welcome');
+})->middleware('throttle: limit-req');
+
+# Middleware
+Route Service Provider
+// custom rate limiter
+RateLimiter::for('limit-req', function (Request $request) {
+    return Limit::perMinute(2)->by($request->user()?->id ?: $request->ip());
+});
+
+# custom attemptLogin
+protected $maxAttempts = 1;
+protected $decayMinutes = 1;
