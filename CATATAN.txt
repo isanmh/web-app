@@ -86,4 +86,32 @@ composer require laravel/octane
 php artisan octane:install
 php artisan octane:start
 
+5. install pest laravel :
+composer remove phpunit/phpunit
+composer require pestphp/pest --dev --with-all-dependencies
 
+./vendor/bin/pest --init
+./vendor/bin/pest
+
+composer require pestphp/pest-plugin-stressless --dev
+
+stress test :
+./vendor/bin/pest stress pestphp.com
+./vendor/bin/pest stress http://127.0.0.1:8000
+./vendor/bin/pest stress http://127.0.0.1:8000 --concurrency=2
+./vendor/bin/pest stress http://127.0.0.1:8000 --concurrency=10 --requests=100
+
+# StressTest.php
+<?php
+
+use function Pest\Stressless\stress;
+
+test('landing page', function () {
+    $result = stress('http://localhost:8000', 100, 10)
+        ->concurrency(5)
+        ->for(10)->seconds()
+        ->dump();
+
+    expect($result->requests->failed->count)->toBe(0);
+    expect($result->requests->duration->med)->toBeLessThan(130);
+});
